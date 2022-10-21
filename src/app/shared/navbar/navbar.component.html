@@ -1,0 +1,35 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark"> <!--sticky-top-->
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+        <img
+          src="https://mdbootstrap.com/img/logo/mdb-transaprent-noshadows.webp"
+          class="me-2"
+          height="20"
+          alt=""
+          loading="lazy"
+        />
+        <small>SCHOOL CALENDAR</small>
+      </a>
+    <!-- <button
+      class="navbar-toggler"
+      type="button"
+      (click)="noListNav.toggle()"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button> -->
+    <div
+      class="collapse navbar-collapse"
+      id="navbarNavAltMarkup"
+      mdbCollapse
+    >
+      <div class="navbar-nav">
+        <a class="nav-link" routerLink="/home" routerLinkActive="active">Inicio</a>
+        <a class="nav-link" routerLink="/teacher" routerLinkActive="active">Docente</a>
+        <a class="nav-link" routerLink="/student" routerLinkActive="active">Estudiante</a>
+        <a class="nav-link" routerLink="/schedule" routerLinkActive="active">Horario</a>
+      </div>
+    </div>
+  </div>
+</nav>

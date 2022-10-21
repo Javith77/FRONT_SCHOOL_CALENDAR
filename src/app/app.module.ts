@@ -1,16 +1,26 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { TeacherComponent } from './page/teacher/teacher.component';
+import { StudentComponent } from './page/student/student.component';
+import { ScheduleComponent } from './page/schedule/schedule.component';
+import { HomeComponent } from './page/home/home.component';
 @NgModule({
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
-    AppComponent
+    AppComponent,
+    NavbarComponent,
+    TeacherComponent,
+    StudentComponent,
+    ScheduleComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
