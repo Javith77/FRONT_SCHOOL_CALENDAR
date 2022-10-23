@@ -5,6 +5,12 @@
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/regular.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+// ... or 
+// @import "~@ng-select/ng-select/themes/material.theme.css";
+
 
 // MDB SCSS
 @import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

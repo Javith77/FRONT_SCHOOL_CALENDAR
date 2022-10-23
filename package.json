@@ -29,6 +29,8 @@
     "@fullcalendar/resource-timeline": "^6.0.0-beta.1",
     "@fullcalendar/timegrid": "^6.0.0-beta.1",
     "@fullcalendar/web-component": "^6.0.0-beta.1",
+    "@ng-select/ng-select": "^9.0.2",
+    "@sweetalert2/ngx-sweetalert2": "^12.0.2",
     "bootstrap": "^5.2.2",
     "bootstrap-icons": "^1.9.1",
     "mdb-angular-ui-kit": "^3.0.0",
