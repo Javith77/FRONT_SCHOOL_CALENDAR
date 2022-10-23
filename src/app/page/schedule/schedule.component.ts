@@ -9,7 +9,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import adaptivePlugin from '@fullcalendar/adaptive'
 import bootstrap5Plugin from '@fullcalendar/bootstrap5';
 import esLocale from '@fullcalendar/core/locales/es'
-// import { createEventId, INITIAL_EVENTS } from 'src/app/event-util';
+import { createEventId, INITIAL_EVENTS } from 'src/app/event-util';
 
 // make the <full-calendar> element globally available by calling this function at the top-level
 defineFullCalendarElement();
@@ -58,7 +58,7 @@ export class ScheduleComponent implements OnInit {
     aspectRatio: 1.8,
     locale: esLocale,
     // initialView: 'dayGridMonth',
-    // initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
+    initialEvents: INITIAL_EVENTS, // alternatively, use the `events` setting to fetch from a feed
     weekends: true,
     editable: true,
     selectable: true,
@@ -89,7 +89,7 @@ export class ScheduleComponent implements OnInit {
 
     if (title) {
       calendarApi.addEvent({
-        // id: createEventId(),
+        id: createEventId(),
         title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
