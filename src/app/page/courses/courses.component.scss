@@ -1,0 +1,33 @@
+// div.scroll {
+//     overflow-x: hidden;
+//     overflow-y: auto;
+// }
+div.scroll {
+    overflow:auto;
+}
+
+.scroll::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.scroll::-webkit-scrollbar:vertical {
+    width:10px;
+}
+
+.scroll::-webkit-scrollbar-button:increment,.scroll::-webkit-scrollbar-button {
+    display: none;
+} 
+
+.scroll::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+
+.scroll::-webkit-scrollbar-thumb {
+    background-color: #797979;
+    border-radius: 20px;
+    border: 4px solid #f1f2f3;
+}
+
+.scroll::-webkit-scrollbar-track {
+    border-radius: 10px;  
+}

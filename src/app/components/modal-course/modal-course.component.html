@@ -1,0 +1,22 @@
+<div class="modal-header" tabindex="-1" role="dialog">
+    <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal(null)"></button>
+</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+            <mdb-form-control>
+                <input mdbValidate validateSuccess="false" mdbInput type="text" id="description" class="form-control" formControlName="description" required/>
+                <label mdbLabel class="form-label" for="description">Descripción</label>
+            </mdb-form-control>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal(null)">
+            Cerrar
+        </button>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </div>
+</form>

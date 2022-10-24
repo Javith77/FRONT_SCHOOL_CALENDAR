@@ -61,7 +61,7 @@ export class TeachersComponent implements OnInit {
    * @param data Teacher
    */
   openModalUpdateTeacher(id: number) {
-    this.getByIdTeacher(id);
+    this.getTeacherById(id);
     this.config.data.title = 'Actualizar datos del docente';
     this.config.data.body = this.teacher;
     this.modalRef = this.modalService.open(ModalTeacherComponent, this.config);
@@ -76,7 +76,7 @@ export class TeachersComponent implements OnInit {
    * 
    * @param id 
    */
-  getByIdTeacher(id: number){
+   getTeacherById(id: number){
     this._teacherService.getByIdTeacher(id).subscribe((response: Teacher) => {
       this.teacher = response;
     })

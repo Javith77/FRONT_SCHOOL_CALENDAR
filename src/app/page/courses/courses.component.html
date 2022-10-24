@@ -1,1 +1,102 @@
-<p>courses works!</p>
+<div class="card">
+    <div class="card-body">
+        <button type="button" class="btn btn-primary" (click)="openModalCreateCourse({})">Nuevo Curso</button>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card" style="min-height: 17rem;">
+            <div class="card-header">Nombre del curso</div>
+            <div class="card-body">
+                <h5 class="card-title">Estudiantes asignados: 21</h5>
+                <div class="card-text scroll" style="height: 7rem;">
+                    <ul>
+                        <li>Materia 1</li>
+                        <li>Materia 2</li>
+                        <li>Materia 3</li>
+                    </ul>
+                </div>
+                <div mdbDropdown class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        aria-expanded="false" mdbDropdownToggle>
+                        Editar
+                    </button>
+                    <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" (click)="openModalUpdateCourse(1)">Editar curso</a></li>
+                        <li><a class="dropdown-item" (click)="openModalAssignDataStudents(1)">Asignar estudiantes</a></li>
+                        <li><a class="dropdown-item" (click)="openModalAssignDataSubjects(1)">Asignar materias</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card">
+            <div class="card-header">Nombre del curso</div>
+            <div class="card-body">
+                <h5 class="card-title">Estudiantes asignados: 16</h5>
+                <div class="card-text scroll" style="height: 7rem;">
+                    <ul>
+                        <li>Materia 1</li>
+                        <li>Materia 2</li>
+                        <li>Materia 2</li>
+                        <li>Materia 2</li>
+                        <li>Materia 2</li>
+                        <li>Materia 2</li>
+                        <li>Materia 3</li>
+                    </ul>
+                </div>
+                <div mdbDropdown class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        aria-expanded="false" mdbDropdownToggle>
+                        Editar
+                    </button>
+                    <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" (click)="openModalUpdateCourse(1)">Editar curso</a></li>
+                        <li><a class="dropdown-item" (click)="openModalAssignDataStudents(1)">Asignar estudiantes</a></li>
+                        <li><a class="dropdown-item" (click)="openModalAssignDataSubjects(1)">Asignar materias</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card">
+            <div class="card-header">Nombre del curso</div>
+            <div class="card-body">
+                <h5 class="card-title">Estudiantes asignados: 0</h5>
+                <div class="card-text scroll" style="height: 7rem;">
+                    <span>No hay materias académicas asignadas</span>
+                </div>
+                <div mdbDropdown class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        aria-expanded="false" mdbDropdownToggle>
+                        Editar
+                    </button>
+                    <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" (click)="openModalUpdateCourse(1)">Editar curso</a></li>
+                        <li><a class="dropdown-item" (click)="openModalAssignDataStudents(1)">Asignar estudiantes</a></li>
+                        <li><a class="dropdown-item" (click)="openModalAssignDataSubjects(1)">Asignar materias</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- <mdb-tabs [justified]="true">
+    <mdb-tab title="Registrar">
+        <button type="button" class="btn btn-primary" >Nuevo Curso</button>
+    </mdb-tab>
+    <mdb-tab title="Asignar Materias">Profile content</mdb-tab>
+    <mdb-tab title="Asignar Estudiantes">Messages content</mdb-tab>
+  </mdb-tabs> -->

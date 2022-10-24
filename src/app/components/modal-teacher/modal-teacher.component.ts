@@ -17,8 +17,6 @@ export class ModalTeacherComponent implements OnInit {
   isSubmit = false;
   genre: string = 'M';
 
-  @Output() eventSaveData = new EventEmitter<string>();
-
   constructor(public modalRef: MdbModalRef<ModalTeacherComponent>, private fb: FormBuilder) {}
 
   ngOnInit(): void {
