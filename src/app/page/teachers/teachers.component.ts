@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { firstValueFrom, Observable } from 'rxjs';
 import { ModalTeacherComponent } from 'src/app/components/modal-teacher/modal-teacher.component';
 import { Teacher } from 'src/app/model/teacher';
 import { TeacherService } from 'src/app/service/teacher.service';
+import SwalAlertUtil from 'src/app/util/swal-alert-util';
 import swal from'sweetalert2';
 
 @Component({
@@ -25,17 +27,6 @@ export class TeachersComponent implements OnInit {
     modalClass: 'modal-top-center'
   }
   teachers: Teacher[] = [];
-  teacher: Teacher = {
-    id: 0,
-    name: '',
-    lastName: '',
-    typeDocument: '',
-    document: '',
-    genre: '',
-    address: '',
-    academicLevel: '',
-    dateOfBirth: ''
-  };
 
   constructor(private _teacherService: TeacherService, private modalService: MdbModalService) { }
 
@@ -60,14 +51,14 @@ export class TeachersComponent implements OnInit {
    * open modal for update teacher
    * @param data Teacher
    */
-  openModalUpdateTeacher(id: number) {
-    this.getTeacherById(id);
+  async openModalUpdateTeacher(id: number) {
+    const data = await firstValueFrom(this.getTeacherById(id));
     this.config.data.title = 'Actualizar datos del docente';
-    this.config.data.body = this.teacher;
+    this.config.data.body = data;
     this.modalRef = this.modalService.open(ModalTeacherComponent, this.config);
-    this.modalRef.onClose.subscribe((data) => {
-      if(data !== null)
-        this.updateTeachers(id, data);
+    this.modalRef.onClose.subscribe((result) => {
+      if(result !== null)
+        this.updateTeachers(id, result);
     });
   }
 
@@ -76,18 +67,18 @@ export class TeachersComponent implements OnInit {
    * 
    * @param id 
    */
-   getTeacherById(id: number){
-    this._teacherService.getByIdTeacher(id).subscribe((response: Teacher) => {
-      this.teacher = response;
-    })
+  getTeacherById(id: number): Observable<Teacher>{
+    return this._teacherService.getByIdTeacher(id);
   }
 
   /**
    * get all teacher
    */
   private getAllTeachers(){
-    this._teacherService.getAllTeachers().subscribe((response: Teacher[]) => {
-      this.teachers = response;
+    this._teacherService.getAllTeachers().subscribe({
+      next: response => {
+        this.teachers = response
+      }
     })
   }
 
@@ -97,16 +88,19 @@ export class TeachersComponent implements OnInit {
    * @param data Teacher
    */
   private createTeacher(data: Teacher){
-    this._teacherService.createTeacher(data).subscribe((response: any) => {
-      if(response.statusCode === 201){
-        this.showSuccessMessage(response.message)
-        this.getAllTeachers();
-      }
-    }, errResponse => {
-      console.log(errResponse)
-      if(errResponse?.status === 400)
-        this.showValidationMessage(data, errResponse.error.fieldErrors);
-    })
+    this._teacherService.createTeacher(data).subscribe({
+      next: (response: any) => {
+        if(response.statusCode === 201){
+          SwalAlertUtil.showSuccessMessage(response.message)
+          this.getAllTeachers();
+        }
+      },
+      error: (e) => {
+        console.log(e)
+        if(e?.status === 400)
+        this.showValidationMessage(data, e.error.fieldErrors);
+      },
+    });
   }
 
   /**
@@ -116,26 +110,22 @@ export class TeachersComponent implements OnInit {
    * @param data Teacher
    */
   private updateTeachers(id: number, data: Teacher){
-    this._teacherService.updateTeacher(id, data).subscribe((response: any) => {
-      if(response.statusCode === 201){
-        this.showSuccessMessage(response.message)
-        this.getAllTeachers();
-      }
-    }, errResponse => {
-      console.log(errResponse)
-      if(errResponse?.status === 400)
-        this.showValidationMessage(data, errResponse.error.fieldErrors);
-    })
+    this._teacherService.updateTeacher(id, data).subscribe({
+      next: (response: any) => {
+        if(response.statusCode === 201){
+          SwalAlertUtil.showSuccessMessage(response.message)
+          this.getAllTeachers();
+        }
+      },
+      error: (e) => {
+        console.log(e)
+        if(e?.status === 400)
+        this.showValidationMessage(data, e.error.fieldErrors);
+      },
+    });
   }
 
-  /**
-   * show successful message
-   * @param message 
-   */
-  private showSuccessMessage(message: string){
-    swal.fire({position: 'top-end', icon: 'success', title: message, showConfirmButton: false, timer: 1500})
-  }
-
+ 
   /**
    * show error message
    * 

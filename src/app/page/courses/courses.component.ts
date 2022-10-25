@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { firstValueFrom, Observable } from 'rxjs';
 import { ModalAssignCourseDataComponent } from 'src/app/components/modal-assign-course-data/modal-assign-course-data.component';
 import { ModalCourseComponent } from 'src/app/components/modal-course/modal-course.component';
+import { AcademicSubject } from 'src/app/model/academic-subject';
 import { Course } from 'src/app/model/course';
+import { Student } from 'src/app/model/student';
+import { AcademicSubjectsService } from 'src/app/service/academic-subjects.service';
+import { CourseService } from 'src/app/service/course.service';
+import { StudentService } from 'src/app/service/student.service';
+import SwalAlertUtil from 'src/app/util/swal-alert-util';
+import swal from'sweetalert2';
 
 @Component({
   selector: 'app-courses',
@@ -23,17 +31,17 @@ export class CoursesComponent implements OnInit {
     keyboard: true,
     modalClass: 'modal-top-center'
   }
-  course: Course = {
-    id: 0,
-    description: '',
-    students: [],
-    academicSubjects: [],
-    maxNumberStudents: 0
-  }
+  courses!: Course[];
 
-  constructor(private modalService: MdbModalService) { }
+  constructor (
+    private _courseService: CourseService,
+    private _studentService: StudentService,
+    private _academicSubjectService: AcademicSubjectsService,
+    private modalService: MdbModalService
+  ) { }
 
   ngOnInit(): void {
+    this.getAllCourses();
   }
 
   /**
@@ -54,10 +62,10 @@ export class CoursesComponent implements OnInit {
    * 
    * @param data Course
    */
-  openModalUpdateCourse(id: number) {
-    this.getCourseById(id);
+   async openModalUpdateCourse(id: number) {
+    const data = await firstValueFrom(this.getCourseById(id));
     this.config.data.title = 'Actualizar datos del curso';
-    this.config.data.body = this.course;
+    this.config.data.body = data;
     this.modalRef = this.modalService.open(ModalCourseComponent, this.config);
     this.modalRef.onClose.subscribe((data) => {
       if(data !== null)
@@ -70,20 +78,9 @@ export class CoursesComponent implements OnInit {
    * 
    * @param data Course
    */
-  openModalAssignDataStudents(idCourse: number) {
-    this.getStudentsByIdCourse(idCourse);
+  async openModalAssignDataStudents(idCourse: number) {
+    const items = await firstValueFrom(this.getStudentsByIdCourse(idCourse));
     const title  = 'Asignar estudiantes';
-    const items = [{
-      id: 1,
-      description: 'Estudiante 1',
-      isCheck: false
-    },
-    {
-      id: 2,
-      description: 'Estudiante 2',
-      isCheck: false
-    }];
-    
     this.modalRef = this.modalService.open(ModalAssignCourseDataComponent, {
       data: {title, items},
       ignoreBackdropClick: true,
@@ -101,20 +98,9 @@ export class CoursesComponent implements OnInit {
    * 
    * @param data Course
    */
-  openModalAssignDataSubjects(idCourse: number) {
-    this.getAcademicSubjectsByIdCourse(idCourse);
+   async openModalAssignDataSubjects(idCourse: number) {
+    const items = await firstValueFrom(this.getAcademicSubjectsByIdCourse(idCourse));
     const title  = 'Asignar asignaturas académicas';
-    const items = [{
-      id: 1,
-      description: 'Materia 1',
-      isCheck: false
-    },
-    {
-      id: 2,
-      description: 'Materia 2',
-      isCheck: true
-    }];
-
     this.modalRef = this.modalService.open(ModalAssignCourseDataComponent, {
       data: {title, items},
       ignoreBackdropClick: true,
@@ -126,25 +112,103 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-
-  private getCourseById(id: number){
-
+  /**
+   * get course by id
+   * 
+   * @param id 
+   * @returns 
+   */
+  private getCourseById(id: number): Observable<Course>{
+    return this._courseService.getCourseById(id);
   }
 
-  private getStudentsByIdCourse(id: number){
-
+  /**
+   * get all courses
+   */
+  private getAllCourses(){
+    this._courseService.getAllCourses().subscribe({
+      next: response => {
+        this.courses = response
+      }
+    });
   }
 
-  private getAcademicSubjectsByIdCourse(id: number){
-
+  /**
+   * get all students by id course
+   * 
+   * @param id
+   */
+  private getStudentsByIdCourse(id: number): Observable<Student[]>{
+    return this._studentService.getStudentsByIdCourse(id);
   }
 
+  /**
+   * get all academic subjects by id course
+   * 
+   * @param id 
+   */
+  private getAcademicSubjectsByIdCourse(id: number): Observable<AcademicSubject[]>{
+    return this._academicSubjectService.getAcademicSubjectsByIdCourse(id);
+  }
+
+  /**
+   * create course
+   * 
+   * @param data Course
+   */
   private createCourse(data: Course){
-
+    this._courseService.createCourse(data).subscribe({
+      next: (response: any) => {
+        if(response.statusCode === 201){
+          SwalAlertUtil.showSuccessMessage(response.message)
+          this.getAllCourses();
+        }
+      },
+      error: (e) => {
+        console.log(e)
+        if(e?.status === 400)
+        this.showValidationMessage(data, e.error.fieldErrors);
+      },
+    })
   }
 
+  /**
+   * update course
+   * 
+   * @param id 
+   * @param data 
+   */
   private updateCourse(id: number, data: Course){
-
+    this._courseService.updateCourse(id, data).subscribe({
+      next: (response: any) => {
+        if(response.statusCode === 201){
+          SwalAlertUtil.showSuccessMessage(response.message)
+          this.getAllCourses();
+        }
+      },
+      error: (e) => {
+        console.log(e)
+        if(e?.status === 400)
+        this.showValidationMessage(data, e.error.fieldErrors);
+      },
+    });
   }
 
+   /**
+   * show error message
+   * 
+   * @param fieldErrors 
+   */
+    private showValidationMessage(data: Course, fieldErrors: any[]){
+      let text = '';
+      fieldErrors.forEach(element => {
+        text += `<p>${element.field}: ${element.message}<p>`
+      });
+  
+      swal.fire({icon: 'error', title: 'Mala petición', html: text, backdrop: false})
+      .then((result) => {
+        if (result.isConfirmed) 
+          this.openModalCreateCourse(data);
+      })
+    }
 }
