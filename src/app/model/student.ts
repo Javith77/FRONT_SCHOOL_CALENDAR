@@ -1,4 +1,6 @@
-export interface Teacher{
+import { Course } from "./course";
+
+export interface Student{
     id: number;
     name: string;
     lastName: string;
@@ -6,6 +8,5 @@ export interface Teacher{
     document: string;
     genre: string;
     address: string;
-    academicLevel: string;
-    dateOfBirth: string;
+    course: Course
 }

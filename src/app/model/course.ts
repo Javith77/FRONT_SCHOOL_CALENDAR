@@ -1,7 +1,7 @@
-export class Course{
-    id!: number;
-    description!: string;
-    students!: any[];
-    academicSubjects!: any[];
-    maxNumberStudents!: number
+export interface Course{
+    id: number;
+    description: string;
+    students: any[];
+    academicSubjects: any[];
+    maxNumberStudents: number
 }
