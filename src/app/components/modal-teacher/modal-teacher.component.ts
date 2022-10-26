@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
-import { TagModel } from 'ngx-chips/core/tag-model';
-import { Observable } from 'rxjs/internal/Observable';
-import { AcademicSubject } from 'src/app/model/academic-subject';
 import { Teacher } from 'src/app/model/teacher';
 
 @Component({
