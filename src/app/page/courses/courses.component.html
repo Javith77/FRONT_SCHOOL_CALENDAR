@@ -15,7 +15,7 @@
             <div class="card-body">
                 <h5 class="card-title">Estudiantes asignados: {{ course.numberStudents }}</h5>
                 <div class="card-text scroll" style="height: 7rem;">
-                    <span *ngIf="course.academicSubjects.length === 0">Sin asignaturas académicas asignadas</span>
+                    <span class="badge badge-warning" *ngIf="course.academicSubjects.length === 0">Sin asignaturas académicas asignadas</span>
                     <ul *ngFor="let academicSubject of course.academicSubjects">
                         <li>{{ academicSubject.description }}</li>
                     </ul>

@@ -29,14 +29,11 @@ export class ModalTeacherComponent implements OnInit {
   // typeDocument: string | undefined;
   form!: FormGroup;
   isSubmit = false;
-  genre: string = 'M';
+  genre!: string;
 
   constructor(public modalRef: MdbModalRef<ModalTeacherComponent>, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    console.log(this.teacherItem)
-    console.log(this.academicSubjectsUnassigned)
-    console.log(this.academicSubjectsAssigned)
     this.createForm(this.teacherItem);
   }
 
@@ -46,6 +43,7 @@ export class ModalTeacherComponent implements OnInit {
    * @param data Teacher or undefined
    */
   createForm(data: Teacher | undefined){
+    this.genre = data ? data.genre : 'M';
     this.form = this.fb.group({
       name: [data?.name, Validators.required],
       lastName: [data?.lastName, Validators.required],

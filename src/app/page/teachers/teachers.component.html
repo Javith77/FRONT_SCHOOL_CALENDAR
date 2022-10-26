@@ -36,9 +36,10 @@
             <p class="text-muted mb-0">{{ item.document }}</p>
           </td>
           <td>
-            <ol class="list-group list-group-light list-group-numbered">
+            <ol class="list-group list-group-light list-group-numbered" *ngIf="item.academicSubjects.length > 0">
               <li class="list-group-item" *ngFor="let academicSubject of item.academicSubjects">{{ academicSubject.description }}</li>
             </ol>
+            <span class="badge badge-warning" *ngIf="item.academicSubjects.length === 0">Sin asignaturas académicas asignadas</span>
           </td>
           <td>{{ item.academicLevel }}</td>
           <td>{{ item.address }}</td>

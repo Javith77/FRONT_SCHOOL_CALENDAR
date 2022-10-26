@@ -17,18 +17,6 @@ import swal from'sweetalert2';
 export class TeachersComponent implements OnInit {
 
   modalRef: MdbModalRef<ModalTeacherComponent> | null = null;
-  // config = {
-  //   animation: true,
-  //   backdrop: true,
-  //   data: {
-  //     title: '',
-  //     teacherItem: {},
-  //     academicSubjectsItems: []
-  //   },
-  //   ignoreBackdropClick: true,
-  //   keyboard: true,
-  //   modalClass: 'modal-top-center'
-  // }
   teachers: Teacher[] = [];
 
   constructor(
