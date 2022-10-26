@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http'
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
@@ -21,7 +22,6 @@ import { StudentComponents } from './page/students/students.component';
 import { ScheduleComponent } from './page/schedule/schedule.component';
 import { HomeComponent } from './page/home/home.component';
 import { ModalTeacherComponent } from './components/modal-teacher/modal-teacher.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoursesComponent } from './page/courses/courses.component';
 import { ModalCourseComponent } from './components/modal-course/modal-course.component';
 import { ModalAssignCourseDataComponent } from './components/modal-assign-course-data/modal-assign-course-data.component';
@@ -55,7 +55,7 @@ import { ModalStudentComponent } from './components/modal-student/modal-student.
     MdbValidationModule,
     SweetAlert2Module,
     MdbTabsModule,
-    MdbDropdownModule
+    MdbDropdownModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

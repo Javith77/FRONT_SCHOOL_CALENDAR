@@ -32,4 +32,8 @@ export class AcademicSubjectsService {
   getAllAcademicSubjects(): Observable<AcademicSubject[]>{
     return this.http.get<AcademicSubject[]>(`${this.API_URL}`);
   }
+
+  getAllAcademicSubjectsWithTeacher(): Observable<AcademicSubject[]>{
+    return this.http.get<AcademicSubject[]>(`${this.API_URL}/with/teacher`);
+  }
 }

@@ -1,20 +1,21 @@
 <div class="card">
   <div class="card-body">
-    <button type="button" class="btn btn-primary" (click)="openModalCreateTeacher({})">Nuevo Docente</button>
+    <button type="button" class="btn btn-primary" (click)="openModalCreateTeacher()">Nuevo Docente</button>
   </div>
 </div>
 
 <div class="card mt-2">
   <div class="card-body">
-    <h5 class="card-title">Card title</h5>
+    <h5 class="card-title">Listado de docentes</h5>
     <table class="table align-middle mb-0 bg-white">
       <thead class="bg-light">
         <tr>
           <th>Nombres</th>
           <th>Documento</th>
+          <th>Asignaturas Acádemicas</th>
           <th>Titulo academico</th>
           <th>Dirección</th>
-          <!-- <th>Fecha de nacimiento</th> -->
+          <th>Genero</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -34,9 +35,16 @@
             <p class="fw-normal mb-1">{{ item.typeDocument }}</p>
             <p class="text-muted mb-0">{{ item.document }}</p>
           </td>
+          <td>
+            <ol class="list-group list-group-light list-group-numbered">
+              <li class="list-group-item" *ngFor="let academicSubject of item.academicSubjects">{{ academicSubject.description }}</li>
+            </ol>
+          </td>
           <td>{{ item.academicLevel }}</td>
           <td>{{ item.address }}</td>
-          <!-- <td>{{ item.dateOfBirth }}</td> -->
+          <td>
+            <span class="badge {{ item.genre === 'M' ? 'bg-primary': 'bg-secondary' }} ">{{ item.genre }}</span>
+          </td>
           <td>
             <button type="button" class="btn btn-link btn-sm btn-rounded" (click)="openModalUpdateTeacher(item.id)">
               Edit

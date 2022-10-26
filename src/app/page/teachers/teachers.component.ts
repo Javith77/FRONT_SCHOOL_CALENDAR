@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { firstValueFrom, Observable } from 'rxjs';
 import { ModalTeacherComponent } from 'src/app/components/modal-teacher/modal-teacher.component';
+import { AcademicSubject } from 'src/app/model/academic-subject';
 import { Teacher } from 'src/app/model/teacher';
+import { AcademicSubjectsService } from 'src/app/service/academic-subjects.service';
 import { TeacherService } from 'src/app/service/teacher.service';
 import SwalAlertUtil from 'src/app/util/swal-alert-util';
 import swal from'sweetalert2';
@@ -15,20 +17,25 @@ import swal from'sweetalert2';
 export class TeachersComponent implements OnInit {
 
   modalRef: MdbModalRef<ModalTeacherComponent> | null = null;
-  config = {
-    animation: true,
-    backdrop: true,
-    data: {
-      title: '',
-      body: {}
-    },
-    ignoreBackdropClick: true,
-    keyboard: true,
-    modalClass: 'modal-top-center'
-  }
+  // config = {
+  //   animation: true,
+  //   backdrop: true,
+  //   data: {
+  //     title: '',
+  //     teacherItem: {},
+  //     academicSubjectsItems: []
+  //   },
+  //   ignoreBackdropClick: true,
+  //   keyboard: true,
+  //   modalClass: 'modal-top-center'
+  // }
   teachers: Teacher[] = [];
 
-  constructor(private _teacherService: TeacherService, private modalService: MdbModalService) { }
+  constructor(
+    private _academicSubjectService: AcademicSubjectsService,
+    private _teacherService: TeacherService,
+    private modalService: MdbModalService
+  ) { }
 
   ngOnInit(): void {
     this.getAllTeachers();
@@ -37,10 +44,21 @@ export class TeachersComponent implements OnInit {
   /**
    * open modal for create teacher
    */
-  openModalCreateTeacher(data: Teacher | {}) {
-    this.config.data.title = 'Guardar datos del docente';
-    this.config.data.body = data;
-    this.modalRef = this.modalService.open(ModalTeacherComponent, this.config);
+  async openModalCreateTeacher(data?: Teacher) {
+    const title = 'Guardar datos del docente';
+    let academicSubjectsAssigned = data ? data.academicSubjects.map(element => element.id) : [];
+    //get all academic subjects
+    let academicSubjectsUnassigned = await firstValueFrom(this.getAllAcademicSubjects());
+
+    this.modalRef = this.modalService.open(ModalTeacherComponent, {
+      ignoreBackdropClick: true,
+      data: {
+        title,
+        teacherItem: data,
+        academicSubjectsAssigned,
+        academicSubjectsUnassigned,
+      }
+    });
     this.modalRef.onClose.subscribe(data => {
       if(data !== null)
         this.createTeacher(data);
@@ -52,10 +70,23 @@ export class TeachersComponent implements OnInit {
    * @param data Teacher
    */
   async openModalUpdateTeacher(id: number) {
-    const data = await firstValueFrom(this.getTeacherById(id), { defaultValue: {} });
-    this.config.data.title = 'Actualizar datos del docente';
-    this.config.data.body = data;
-    this.modalRef = this.modalService.open(ModalTeacherComponent, this.config);
+    const title = 'Actualizar datos del docente';
+    let data = await firstValueFrom(this.getTeacherById(id));
+    
+    let academicSubjectsAssigned = data ? data.academicSubjects.map(element => element.id) : [];
+    //get all academic subjects
+    let academicSubjectsUnassigned = await await firstValueFrom(this.getAllAcademicSubjects());
+
+    // this.config.data.body = data;
+    this.modalRef = this.modalService.open(ModalTeacherComponent, {
+      ignoreBackdropClick: true,
+      data: {
+        title,
+        teacherItem: data,
+        academicSubjectsAssigned,
+        academicSubjectsUnassigned,
+      }
+    });
     this.modalRef.onClose.subscribe((result) => {
       if(result !== null)
         this.updateTeachers(id, result);
@@ -63,11 +94,26 @@ export class TeachersComponent implements OnInit {
   }
 
   /**
+   * get style class badge
+   * 
+   * @returns 
+   */
+  getStyleClass(index: number): string{
+    console.log(index)
+    const styleClass = ['primary','secundary','success','warning','Info'];
+    if(index <= styleClass.length -1){
+      return styleClass[index];
+    }
+
+    return styleClass[0];
+  }
+
+  /**
    * find teacher
    * 
    * @param id 
    */
-  getTeacherById(id: number): Observable<Teacher>{
+  private getTeacherById(id: number): Observable<Teacher>{
     return this._teacherService.getByIdTeacher(id);
   }
 
@@ -80,6 +126,13 @@ export class TeachersComponent implements OnInit {
         this.teachers = response
       }
     })
+  }
+
+  /**
+   * get all academic subjects
+   */
+   private getAllAcademicSubjects(): Observable<AcademicSubject[]> {
+    return this._academicSubjectService.getAllAcademicSubjects();
   }
 
   /**
@@ -119,8 +172,10 @@ export class TeachersComponent implements OnInit {
       },
       error: (e) => {
         console.log(e)
-        if(e?.status === 400)
-        this.showValidationMessage(data, e.error.fieldErrors);
+        if(e?.status === 400){
+          data.id == id;
+          this.showValidationMessage(data, e.error.fieldErrors);
+        }
       },
     });
   }
@@ -140,7 +195,12 @@ export class TeachersComponent implements OnInit {
     swal.fire({icon: 'error', title: 'Mala petición', html: text, backdrop: false})
     .then((result) => {
       if (result.isConfirmed) 
-        this.openModalCreateTeacher(data);
+          console.log(data.id)
+        if(data.id === undefined){
+          this.openModalCreateTeacher(data);
+        }else{
+          this.openModalUpdateTeacher(data.id);
+        }
     })
   }
 

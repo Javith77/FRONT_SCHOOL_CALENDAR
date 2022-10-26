@@ -68,6 +68,13 @@
                 <ng-option value="Doctorado">Doctorado</ng-option>
             </ng-select>
         </div>
+
+        <div class="col-md-12">
+            <ng-select id="academicLevel" [items]="academicSubjectsUnassigned" [ngModelOptions]="{standalone: true}"
+                bindLabel="description" bindValue="id" placeholder="Asignaturas académicas" [multiple]="true" class="mb-3"
+                [(ngModel)]="academicSubjectsAssigned">
+            </ng-select>
+        </div>
       </div>
     </div>
     <div class="modal-footer">

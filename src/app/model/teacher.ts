@@ -1,3 +1,5 @@
+import { AcademicSubject } from "./academic-subject";
+
 export interface Teacher{
     id: number;
     name: string;
@@ -7,5 +9,6 @@ export interface Teacher{
     genre: string;
     address: string;
     academicLevel: string;
-    dateOfBirth: string;
+    academicSubjects: AcademicSubject[];
+    // dateOfBirth: string;
 }

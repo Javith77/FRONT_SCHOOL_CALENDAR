@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
+import { TagModel } from 'ngx-chips/core/tag-model';
+import { Observable } from 'rxjs/internal/Observable';
+import { AcademicSubject } from 'src/app/model/academic-subject';
 import { Teacher } from 'src/app/model/teacher';
 
 @Component({
@@ -10,9 +13,23 @@ import { Teacher } from 'src/app/model/teacher';
 })
 export class ModalTeacherComponent implements OnInit {
 
-  title: string  | undefined;
-  body: Teacher  | undefined;
-  typeDocument: string | undefined;
+  title!: string;
+  teacherItem!: Teacher;
+  academicSubjectsAssigned!: [];
+  academicSubjectsUnassigned!: [];
+  tagModel: any = [
+    {
+      display: 'display',
+      value: 124242,
+      readonly: true
+    },
+    {
+      display: 'display',
+      value: 124242,
+      readonly: true
+    }
+  ]
+  // typeDocument: string | undefined;
   form!: FormGroup;
   isSubmit = false;
   genre: string = 'M';
@@ -20,7 +37,10 @@ export class ModalTeacherComponent implements OnInit {
   constructor(public modalRef: MdbModalRef<ModalTeacherComponent>, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.createForm(this.body);
+    console.log(this.teacherItem)
+    console.log(this.academicSubjectsUnassigned)
+    console.log(this.academicSubjectsAssigned)
+    this.createForm(this.teacherItem);
   }
 
   /**
@@ -37,7 +57,7 @@ export class ModalTeacherComponent implements OnInit {
       genre: [data? data.genre : this.genre],
       address: [data?.address, Validators.required],
       academicLevel: [data?.academicLevel, Validators.required],
-      dateOfBirth: [new Date('1997-10-26T00:00:00Z') , Validators.required],
+      academicSubjects:[]
     });
   }
 
@@ -75,9 +95,16 @@ export class ModalTeacherComponent implements OnInit {
    * @returns 
    */
   onSubmit(){
+    let academicSubjects: any [] = [];
+    this.academicSubjectsAssigned.forEach(element => {
+      academicSubjects.push({
+        id: element
+      });
+    })
+
     this.isSubmit = true;
     this.form.value.genre = this.genre;
-    console.log(this.form)
+    this.form.value.academicSubjects = academicSubjects;
     
     if (!this.form?.valid) {
       this.form.markAllAsTouched();
