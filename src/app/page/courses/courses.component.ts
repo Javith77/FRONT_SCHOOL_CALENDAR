@@ -10,7 +10,7 @@ import { AcademicSubjectsService } from 'src/app/service/academic-subjects.servi
 import { CourseService } from 'src/app/service/course.service';
 import { StudentService } from 'src/app/service/student.service';
 import SwalAlertUtil from 'src/app/util/swal-alert-util';
-import swal from'sweetalert2';
+import swal from 'sweetalert2';
 
 @Component({
   selector: 'app-courses',
@@ -33,7 +33,7 @@ export class CoursesComponent implements OnInit {
   }
   courses!: Course[];
 
-  constructor (
+  constructor(
     private _courseService: CourseService,
     private _studentService: StudentService,
     private _academicSubjectService: AcademicSubjectsService,
@@ -47,12 +47,12 @@ export class CoursesComponent implements OnInit {
   /**
    * open modal for create course
    */
-   openModalCreateCourse(data: Course | {}) {
+  openModalCreateCourse(data: Course | {}) {
     this.config.data.title = 'Guardar datos del curso';
     this.config.data.body = data;
     this.modalRef = this.modalService.open(ModalCourseComponent, this.config);
     this.modalRef.onClose.subscribe(data => {
-      if(data !== null)
+      if (data !== null)
         this.createCourse(data);
     });
   }
@@ -62,13 +62,13 @@ export class CoursesComponent implements OnInit {
    * 
    * @param data Course
    */
-   async openModalUpdateCourse(id: number) {
+  async openModalUpdateCourse(id: number) {
     const data = await firstValueFrom(this.getCourseById(id));
     this.config.data.title = 'Actualizar datos del curso';
     this.config.data.body = data;
     this.modalRef = this.modalService.open(ModalCourseComponent, this.config);
     this.modalRef.onClose.subscribe((data) => {
-      if(data !== null)
+      if (data !== null)
         this.updateCourse(id, data);
     });
   }
@@ -76,18 +76,30 @@ export class CoursesComponent implements OnInit {
   /**
    * open modal to assign students
    * 
-   * @param data Course
+   * @param course Course
    */
-  async openModalAssignDataStudents(idCourse: number) {
-    const items = await firstValueFrom(this.getStudentsByIdCourse(idCourse));
-    const title  = 'Asignar estudiantes';
+  async openModalAssignDataStudents(course: Course) {
+    const title = 'Asignar estudiantes';
+    let items: any[] = [];
+
+    //add students assigned to the course
+    course.students.forEach(element => {
+      items.push({ id: element.id, description: `${element.name} ${element.lastName}`, check: true });
+    });
+
+    //add students unassigned in the course
+    (await firstValueFrom(this.getUnassignedStudentsInCourse())).forEach(element => {
+      items.push({ id: element.id, description: `${element.name} ${element.lastName}`, check: false });
+    });
+
     this.modalRef = this.modalService.open(ModalAssignCourseDataComponent, {
-      data: {title, items},
+      data: { title, items, type: 'S' },
       ignoreBackdropClick: true,
     });
     this.modalRef.onClose.subscribe((data) => {
-      if(data !== null){
+      if (data !== null) {
         console.log(data);
+        this.updateCourseAssignmentsToStudents(course.id, data);
       }
     });
   }
@@ -98,16 +110,24 @@ export class CoursesComponent implements OnInit {
    * 
    * @param data Course
    */
-   async openModalAssignDataSubjects(idCourse: number) {
-    const items = await firstValueFrom(this.getAcademicSubjectsByIdCourse(idCourse));
-    const title  = 'Asignar asignaturas académicas';
+  async openModalAssignDataSubjects(course: Course) {
+    //const items = await firstValueFrom(this.getAcademicSubjectsByIdCourse(idCourse));
+    const title = 'Asignar asignaturas académicas';
+    let items: any[] = [];
+
+    //check elements assigned to the course
+    (await firstValueFrom(this.getAllAcademicSubjects())).forEach(element => {
+      let itemFound = course.academicSubjects.find(item => item.id === element.id);
+      items.push({ id: element.id, description: element.description, check: itemFound !== undefined });
+    });
+
     this.modalRef = this.modalService.open(ModalAssignCourseDataComponent, {
-      data: {title, items},
+      data: { title, items, type: 'A' },
       ignoreBackdropClick: true,
     });
     this.modalRef.onClose.subscribe((data) => {
-      if(data !== null){
-        console.log(data);
+      if (data !== null) {
+        this.updateCourseAssignmentsToAcademicSubjects(course.id, data);
       }
     });
   }
@@ -118,37 +138,36 @@ export class CoursesComponent implements OnInit {
    * @param id 
    * @returns 
    */
-  private getCourseById(id: number): Observable<Course>{
+  private getCourseById(id: number): Observable<Course> {
     return this._courseService.getCourseById(id);
   }
 
   /**
    * get all courses
    */
-  private getAllCourses(){
+  private getAllCourses() {
     this._courseService.getAllCourses().subscribe({
       next: response => {
-        this.courses = response
+        this.courses = response;
+        this.courses.forEach(element => {
+          element.numberStudents = element.students.length;
+        })
       }
     });
   }
 
   /**
-   * get all students by id course
-   * 
-   * @param id
+   * get unassigned students in courses
    */
-  private getStudentsByIdCourse(id: number): Observable<Student[]>{
-    return this._studentService.getStudentsByIdCourse(id);
+  private getUnassignedStudentsInCourse(): Observable<Student[]> {
+    return this._studentService.getUnassignedStudentsInCourse();
   }
 
   /**
-   * get all academic subjects by id course
-   * 
-   * @param id 
+   * get all academic subjects
    */
-  private getAcademicSubjectsByIdCourse(id: number): Observable<AcademicSubject[]>{
-    return this._academicSubjectService.getAcademicSubjectsByIdCourse(id);
+  private getAllAcademicSubjects(): Observable<AcademicSubject[]> {
+    return this._academicSubjectService.getAllAcademicSubjects();
   }
 
   /**
@@ -156,18 +175,18 @@ export class CoursesComponent implements OnInit {
    * 
    * @param data Course
    */
-  private createCourse(data: Course){
+  private createCourse(data: Course) {
     this._courseService.createCourse(data).subscribe({
       next: (response: any) => {
-        if(response.statusCode === 201){
+        if (response.statusCode === 201) {
           SwalAlertUtil.showSuccessMessage(response.message)
           this.getAllCourses();
         }
       },
       error: (e) => {
         console.log(e)
-        if(e?.status === 400)
-        this.showValidationMessage(data, e.error.fieldErrors);
+        if (e?.status === 400)
+          this.showValidationMessage(data, e.error.fieldErrors);
       },
     })
   }
@@ -178,37 +197,77 @@ export class CoursesComponent implements OnInit {
    * @param id 
    * @param data 
    */
-  private updateCourse(id: number, data: Course){
+  private updateCourse(id: number, data: Course) {
     this._courseService.updateCourse(id, data).subscribe({
       next: (response: any) => {
-        if(response.statusCode === 201){
+        if (response.statusCode === 201) {
           SwalAlertUtil.showSuccessMessage(response.message)
           this.getAllCourses();
         }
       },
       error: (e) => {
         console.log(e)
-        if(e?.status === 400)
-        this.showValidationMessage(data, e.error.fieldErrors);
+        if (e?.status === 400)
+          this.showValidationMessage(data, e.error.fieldErrors);
+      },
+    });
+  }
+
+  /**
+   * assign selected students
+   * unassign unselected students
+   * 
+   * @param data 
+   */
+  private updateCourseAssignmentsToStudents(idCourse: number, data: any) {
+    this._studentService.updateCourseAssignmentsToStudents(idCourse, data).subscribe({
+      next: (response: any) => {
+        if (response.statusCode === 201) {
+          SwalAlertUtil.showSuccessMessage(response.message)
+          this.getAllCourses();
+        }
+      },
+      error: (e) => {
+        console.log(e);
       },
     });
   }
 
    /**
-   * show error message
+   * assign selected academic subjects
+   * unassign unselected academic subjects
    * 
-   * @param fieldErrors 
+   * @param data 
    */
-    private showValidationMessage(data: Course, fieldErrors: any[]){
-      let text = '';
-      fieldErrors.forEach(element => {
-        text += `<p>${element.field}: ${element.message}<p>`
+    private updateCourseAssignmentsToAcademicSubjects(idCourse: number, data: any) {
+      this._courseService.updateCourseAssignmentsToAcademicSubjects(idCourse, data).subscribe({
+        next: (response: any) => {
+          if (response.statusCode === 201) {
+            SwalAlertUtil.showSuccessMessage(response.message)
+            this.getAllCourses();
+          }
+        },
+        error: (e) => {
+          console.log(e);
+        },
       });
-  
-      swal.fire({icon: 'error', title: 'Mala petición', html: text, backdrop: false})
+    }
+
+  /**
+  * show error message
+  * 
+  * @param fieldErrors 
+  */
+  private showValidationMessage(data: Course, fieldErrors: any[]) {
+    let text = '';
+    fieldErrors.forEach(element => {
+      text += `<p>${element.field}: ${element.message}<p>`
+    });
+
+    swal.fire({ icon: 'error', title: 'Mala petición', html: text, backdrop: false })
       .then((result) => {
-        if (result.isConfirmed) 
+        if (result.isConfirmed)
           this.openModalCreateCourse(data);
       })
-    }
+  }
 }

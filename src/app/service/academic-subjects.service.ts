@@ -21,13 +21,13 @@ export class AcademicSubjectsService {
     return this.http.put(`${this.API_URL}/${id}`, data);
   }
 
+  // updateCourseAssignmentsToAcademicSubjects(idCourse: number, data: any){
+  //   return this.http.put(`${this.API_URL}/course/assignments/${idCourse}`, data);
+  // }
+
   getAcademicSubjectById(id: number): Observable<AcademicSubject>{
     return this.http.get<AcademicSubject>(`${this.API_URL}/${id}`);
   }
-
-  getAcademicSubjectsByIdCourse(id: number): Observable<AcademicSubject[]>{
-    return this.http.get<AcademicSubject[]>(`${this.API_URL}/course/${id}`);
-   }
 
   getAllAcademicSubjects(): Observable<AcademicSubject[]>{
     return this.http.get<AcademicSubject[]>(`${this.API_URL}`);

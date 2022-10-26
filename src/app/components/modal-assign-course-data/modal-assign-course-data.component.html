@@ -4,17 +4,17 @@
 </div>
 
 <div class="modal-body">
-    <div class="form-check" *ngIf="items">
+    <div class="form-check" *ngIf="items.length > 0">
         <input mdbCheckbox type="checkbox" class="form-check-input" id="checkAll" autocomplete="off" [checked]="isCheckAll" (click)="checkAllItems()"/>
         <label class="form-check-label" for="checkAll">Seleccionar todos</label>
     </div>
     <div class="list-group list-group-light mt-2" *ngIf="items">
         <li class="list-group-item" *ngFor="let item of items; index as i;">
-          <input mdbCheckbox class="form-check-input" type="checkbox" [id]="item.id" [checked]="item.isCheck" (click)="checkItem(item.id)"/>
+          <input mdbCheckbox class="form-check-input" type="checkbox" [id]="item.id" [checked]="item.check" (click)="checkItem(item.id)"/>
           <label class="form-check-label" [for]="item.id">{{ item.description }}</label>
         </li>
     </div>
-    <p *ngIf="!items">No se encontraron asignaturas</p>
+    <p *ngIf="items.length === 0">No se encontraron {{ type === 'S' ? 'estudiantes':'asignaturas academicas' }}</p>
 </div>
 
 <div class="modal-footer">

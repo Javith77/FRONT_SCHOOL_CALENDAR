@@ -21,6 +21,10 @@ export class CourseService {
     return this.http.put(`${this.API_URL}/${id}`, data);
   }
 
+  updateCourseAssignmentsToAcademicSubjects(idCourse: number, data: any): Observable<any>{
+    return this.http.put(`${this.API_URL}/academic-subjects/assignments/${idCourse}`, data);
+  }
+
   getCourseById(id: number): Observable<Course>{
     return this.http.get<Course>(`${this.API_URL}/${id}`);
   }

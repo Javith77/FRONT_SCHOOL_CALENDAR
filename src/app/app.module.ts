@@ -25,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoursesComponent } from './page/courses/courses.component';
 import { ModalCourseComponent } from './components/modal-course/modal-course.component';
 import { ModalAssignCourseDataComponent } from './components/modal-assign-course-data/modal-assign-course-data.component';
+import { ModalStudentComponent } from './components/modal-student/modal-student.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -38,7 +39,8 @@ import { ModalAssignCourseDataComponent } from './components/modal-assign-course
     ModalTeacherComponent,
     CoursesComponent,
     ModalCourseComponent,
-    ModalAssignCourseDataComponent
+    ModalAssignCourseDataComponent,
+    ModalStudentComponent
   ],
   imports: [
     BrowserModule,

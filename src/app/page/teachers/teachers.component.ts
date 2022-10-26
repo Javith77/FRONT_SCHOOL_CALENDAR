@@ -52,7 +52,7 @@ export class TeachersComponent implements OnInit {
    * @param data Teacher
    */
   async openModalUpdateTeacher(id: number) {
-    const data = await firstValueFrom(this.getTeacherById(id));
+    const data = await firstValueFrom(this.getTeacherById(id), { defaultValue: {} });
     this.config.data.title = 'Actualizar datos del docente';
     this.config.data.body = data;
     this.modalRef = this.modalService.open(ModalTeacherComponent, this.config);

@@ -21,6 +21,10 @@ export class StudentService {
     return this.http.put(`${this.API_URL}/${id}`, data);
   }
 
+  updateCourseAssignmentsToStudents(idCourse: number, data: any){
+    return this.http.put(`${this.API_URL}/course/assignments/${idCourse}`, data);
+  }
+
   getStudentById(id: number): Observable<Student>{
     return this.http.get<Student>(`${this.API_URL}/${id}`);
   }
@@ -29,8 +33,8 @@ export class StudentService {
     return this.http.get<Student[]>(`${this.API_URL}`);
   }
 
-  getStudentsByIdCourse(id: number): Observable<Student[]>{
-    return this.http.get<Student[]>(`${this.API_URL}/${id}`);
+  getUnassignedStudentsInCourse(): Observable<Student[]>{
+    return this.http.get<Student[]>(`${this.API_URL}/unassigned/course`);
   }
 
 }

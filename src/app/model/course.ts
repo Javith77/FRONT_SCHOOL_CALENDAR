@@ -1,7 +1,10 @@
+import { AcademicSubject } from "./academic-subject";
+import { Student } from "./student";
+
 export interface Course{
     id: number;
     description: string;
-    students: any[];
-    academicSubjects: any[];
-    maxNumberStudents: number
+    students: Student[];
+    academicSubjects: AcademicSubject[];
+    numberStudents: number
 }

@@ -9,22 +9,24 @@ import { ModalCourseComponent } from '../modal-course/modal-course.component';
 })
 export class ModalAssignCourseDataComponent implements OnInit {
 
-  title: string  | undefined;
+  title!: string;
+  type!: string;
   items!: any[];
   isCheckAll = false;
 
   constructor(public modalRef: MdbModalRef<ModalCourseComponent>) {}
 
   ngOnInit(): void {
+    this.isCheckAll =  this.isCheckAll = (this.items) ? this.items.every(item => item.check) : false;
   }
 
   checkItem(id: number){
     this.items?.forEach(element => {
       if(element.id === id)
-        element.isCheck = !element.isCheck;
+        element.check = !element.check;
     });
 
-    this.isCheckAll = (this.items) ? this.items.every(item => item.isCheck) : false;
+    this.isCheckAll = (this.items) ? this.items.every(item => item.check) : false;
   }
 
   /**
@@ -33,7 +35,7 @@ export class ModalAssignCourseDataComponent implements OnInit {
   checkAllItems(){
     this.isCheckAll = !this.isCheckAll;
     this.items?.forEach(element => {
-      element.isCheck = this.isCheckAll;
+      element.check = this.isCheckAll;
     });
   }
 
