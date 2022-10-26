@@ -111,12 +111,11 @@ export class CoursesComponent implements OnInit {
    * @param data Course
    */
   async openModalAssignDataSubjects(course: Course) {
-    //const items = await firstValueFrom(this.getAcademicSubjectsByIdCourse(idCourse));
     const title = 'Asignar asignaturas académicas';
     let items: any[] = [];
 
     //check elements assigned to the course
-    (await firstValueFrom(this.getAllAcademicSubjects())).forEach(element => {
+    (await firstValueFrom(this.getAllAcademicSubjectsWithTeacher())).forEach(element => {
       let itemFound = course.academicSubjects.find(item => item.id === element.id);
       items.push({ id: element.id, description: element.description, check: itemFound !== undefined });
     });
@@ -164,10 +163,10 @@ export class CoursesComponent implements OnInit {
   }
 
   /**
-   * get all academic subjects
+   * get all academic subjects with assigned teachers
    */
-  private getAllAcademicSubjects(): Observable<AcademicSubject[]> {
-    return this._academicSubjectService.getAllAcademicSubjects();
+  private getAllAcademicSubjectsWithTeacher(): Observable<AcademicSubject[]> {
+    return this._academicSubjectService.getAllAcademicSubjectsWithTeacher();
   }
 
   /**
