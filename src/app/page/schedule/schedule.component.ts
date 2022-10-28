@@ -97,11 +97,13 @@ export class ScheduleComponent implements OnInit {
    */
   changeCourse(course: any){
     if(course === undefined){
+      this.initCalendar([]);
       return;
     }
-      this.course = course;
-      this.getAcademicSubjectByCourseId(course.id);
-      this.getAllScheduleByCourse(course.id);
+
+    this.course = course;
+    this.getAcademicSubjectByCourseId(course.id);
+    this.getAllScheduleByCourse(course.id);
   }
 
   /**

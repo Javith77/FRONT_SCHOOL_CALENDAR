@@ -68,6 +68,7 @@ export class ModalScheduleComponent implements OnInit {
       end: endDate,
     }
 
+    // console.log(response)
     this.closeModal(response)
   }
 
@@ -78,10 +79,8 @@ export class ModalScheduleComponent implements OnInit {
       const dayFound = date.getDay();
       if (this.dayStringToDayNumber(daySelected) === dayFound) {
         isFound = true;
-      } else {
-        // add a day
-        date.setDate(date.getDate() + 1);
-      }
+      } 
+      date.setDate(date.getDate() + 1);
     }
     return date;
   }
