@@ -33,4 +33,8 @@ export class CourseService {
     return this.http.get<Course[]>(`${this.API_URL}`);
   }
 
+  getAllCoursesWithtAcademicSubjectAssign(): Observable<Course[]>{
+    return this.http.get<Course[]>(`${this.API_URL}/assign/subject-academic`);
+  }
+
 }

@@ -29,6 +29,11 @@ export class AcademicSubjectsService {
     return this.http.get<AcademicSubject>(`${this.API_URL}/${id}`);
   }
 
+  
+  getAllAcademicSubjectByIdCourse(idCourse: number): Observable<AcademicSubject[]>{
+    return this.http.get<AcademicSubject[]>(`${this.API_URL}/course/${idCourse}`);
+  }
+
   getAllAcademicSubjects(): Observable<AcademicSubject[]>{
     return this.http.get<AcademicSubject[]>(`${this.API_URL}`);
   }

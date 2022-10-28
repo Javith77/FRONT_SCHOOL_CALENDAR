@@ -8,6 +8,7 @@ export const environment = {
   API_STUDENT: 'http://localhost:8080/api/students',
   API_COURSE: 'http://localhost:8080/api/courses',
   API_ACADEMIC_SUBJECT: 'http://localhost:8080/api/academic-subjects',
+  API_SCHEDULE: 'http://localhost:8080/api/schedule',
 };
 
 /*

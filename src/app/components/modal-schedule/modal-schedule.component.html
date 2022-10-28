@@ -1,0 +1,59 @@
+<div class="modal-header" tabindex="-1" role="dialog">
+    <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal(null)"></button>
+</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <!-- <mdb-form-control>
+                    <input mdbInput [readonly]="true" type="text" id="date" class="form-control" formControlName="date" />
+                </mdb-form-control> -->
+
+                <!-- <mdb-form-control>
+                    formControlName="startDate" required/>
+                    <label mdbLabel class="form-label" for="description">Fecha de inicio</label>
+                </mdb-form-control>
+
+                <mdb-form-control>
+                    <input mdbValidate validateSuccess="false" mdbInput type="date" id="endDate" class="form-control" 
+                    formControlName="endDate" required/>
+                    <label mdbLabel class="form-label" for="description">Fecha fin</label>
+                </mdb-form-control> -->
+
+                <label mdbLabel class="form-label" >Dia</label>
+                <ng-select id="day" placeholder="Seleccionar dia" class="mb-3" formControlName="day" required>
+                    <ng-option value="1">Lunes</ng-option>
+                    <ng-option value="2">Martes</ng-option>
+                    <ng-option value="3">Miercoles</ng-option>
+                    <ng-option value="4">Jueves</ng-option>
+                    <ng-option value="4">Viernes</ng-option>
+                    <ng-option value="4">Sabado</ng-option>
+                    <ng-option value="4">Domingo</ng-option>
+                </ng-select>
+
+                <label mdbLabel class="form-label" >Hora de inicio</label>
+                <div class="ngx-timepicker-field-example mb-3">
+                    <ngx-timepicker-field [defaultTime]="'08:00 am'" [controlOnly]="true" formControlName="time" [format]="24"></ngx-timepicker-field>
+                </div>
+                <!-- <input placeholder="24hr format" aria-label="24hr format" [ngxTimepicker]="fullTime" [format]="24"  readonly>
+                <ngx-material-timepicker #fullTime></ngx-material-timepicker> -->
+
+                <label mdbLabel class="form-label">Numero de horas</label>
+                <ng-select id="hours" placeholder="Seleccionar numero de horas" class="mb-3" formControlName="hours" required>
+                    <ng-option value="1">1 hora</ng-option>
+                    <ng-option value="2">2 horas</ng-option>
+                    <ng-option value="3">3 horas</ng-option>
+                    <ng-option value="4">4 horas</ng-option>
+                </ng-select>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal(null)">
+            Cerrar
+        </button>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </div>
+</form>
