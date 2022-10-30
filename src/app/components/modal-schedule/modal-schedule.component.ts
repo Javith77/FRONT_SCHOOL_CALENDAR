@@ -28,17 +28,10 @@ export class ModalScheduleComponent implements OnInit {
    * @param data Schedule
    */
   createForm(data: any) {
-    const startDate = new Date();
-    const endDate = this.addHoursToDate(1, startDate);
-    const event = new Date(Date.UTC(startDate.getFullYear(), startDate.getMonth(), startDate.getDay(), 0, 0, 0));
-    const options: any = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     this.form = this.fb.group({
-      // date: [event.toLocaleDateString(undefined, options)],
-      // startDate: [1, Validators.required],
-      // endDate: [1, Validators.required],
-      day: ['Lunes', Validators.required],
+      day: [null, Validators.required],
       hours: [1, Validators.required],
-      time: [null, Validators.required],
+      time: ['07:00', Validators.required],
     });
   }
 
@@ -49,10 +42,12 @@ export class ModalScheduleComponent implements OnInit {
    */
   onSubmit() {
     this.isSubmit = true;
+    console.log(this.form.valid)
     if (!this.form?.valid) {
       this.form.markAllAsTouched();
       return;
     }
+
     const arrayTime = this.form.value.time.split(':');
     const hours = arrayTime[0];
     const minute = arrayTime[1];
@@ -62,26 +57,31 @@ export class ModalScheduleComponent implements OnInit {
     startDate?.setHours(hours, minute, seconds);
     const endDate = this.addHoursToDate(this.form.value.hours, startDate!);
 
-    let response = {
+    this.closeModal({
       data: this.item,
       start: startDate,
       end: endDate,
-    }
-
-    // console.log(response)
-    this.closeModal(response)
+    });
   }
 
   private getStartDate(daySelected: string) {
     let isFound = false;
     const date = new Date();
-    while (!isFound) {
-      const dayFound = date.getDay();
-      if (this.dayStringToDayNumber(daySelected) === dayFound) {
-        isFound = true;
-      } 
-      date.setDate(date.getDate() + 1);
+
+    const dayFound = date.getDay();
+    //if current day is selected
+    if (parseInt(daySelected) === dayFound) {
+      return date;
     }
+
+    while (!isFound) {
+      date.setDate(date.getDate() + 1);
+      const dayFound = date.getDay();
+      if (parseInt(daySelected) === dayFound) {
+        isFound = true;
+      }
+    }
+
     return date;
   }
   /**

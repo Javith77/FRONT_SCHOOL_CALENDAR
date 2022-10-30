@@ -1,11 +1,9 @@
 <div class="card">
-  <div class="body">
+  <div class="card-body">
     <div class="row">
       <div class="col-md-3">
-
-        <!-- <div id='external-events'> -->
-
-        <ng-select id="courses" [ngModel]="course" [items]="courses" bindLabel="description" bindValue="id" (change)="changeCourse($event)"
+        <ng-select id="courses" [(ngModel)]="course" [items]="courses"
+          bindLabel="description" (change)="changeCourse($event)"
           placeholder="Cursos" class="mb-3">
         </ng-select>
 
@@ -19,9 +17,9 @@
       </div>
       <!-- </div> -->
       <div class="col-md-9">
-        <div id='calendar-container'>
+        <!-- <div id='calendar-container'>
           <div id='calendar'></div>
-        </div>
+        </div> -->
         <full-calendar #calendar [options]='calendarOptions'></full-calendar>
       </div>
 

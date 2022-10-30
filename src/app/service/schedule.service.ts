@@ -13,7 +13,7 @@ export class ScheduleService {
 
   constructor(private http: HttpClient) { }
 
-  createCourse(data: Schedule){
+  createSchedule(data: Schedule){
     return this.http.post(`${this.API_URL}`, data);
   }
 

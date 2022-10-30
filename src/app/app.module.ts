@@ -28,7 +28,6 @@ import { ModalCourseComponent } from './components/modal-course/modal-course.com
 import { ModalAssignCourseDataComponent } from './components/modal-assign-course-data/modal-assign-course-data.component';
 import { ModalStudentComponent } from './components/modal-student/modal-student.component';
 import { ModalScheduleComponent } from './components/modal-schedule/modal-schedule.component';
-import { ScheduleComponentComponent } from './components/schedule-component/schedule-component.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -45,7 +44,6 @@ import { ScheduleComponentComponent } from './components/schedule-component/sche
     ModalAssignCourseDataComponent,
     ModalStudentComponent,
     ModalScheduleComponent,
-    ScheduleComponentComponent
   ],
   imports: [
     BrowserModule,

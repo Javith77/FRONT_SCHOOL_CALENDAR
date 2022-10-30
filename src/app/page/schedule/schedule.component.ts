@@ -21,7 +21,7 @@ import { Schedule } from 'src/app/model/schedule';
 import { ScheduleService } from 'src/app/service/schedule.service';
 import SwalAlertUtil from 'src/app/util/swal-alert-util';
 import { Calendar } from '@fullcalendar/core';
-declare var $:any;
+declare var $: any;
 
 // make the <full-calendar> element globally available by calling this function at the top-level
 defineFullCalendarElement();
@@ -38,7 +38,7 @@ export class ScheduleComponent implements OnInit {
   course!: Course;
   courses!: Course[];
   academicSubjects!: AcademicSubject[];
-  
+
   calendarOptions!: CalendarOptions;
   @ViewChild('mycal', { read: ElementRef }) calendar!: ElementRef;
 
@@ -48,7 +48,7 @@ export class ScheduleComponent implements OnInit {
     private _academicSubjectService: AcademicSubjectsService,
     private modalService: MdbModalService
   ) { }
-  
+
 
   ngOnInit(): void {
     this.getAllCoursesWithtAcademicSubjectAssign();
@@ -56,25 +56,6 @@ export class ScheduleComponent implements OnInit {
     // this.initDraggable();
   }
 
-  currentEvents: EventApi[] = [];
-
-  handleDateSelect(selectInfo: DateSelectArg) {
-    console.log(selectInfo)
-    // const title = prompt('Please enter a new title for your event');
-    // const calendarApi = selectInfo.view.calendar;
-
-    // calendarApi.unselect(); // clear date selection
-
-    // if (title) {
-    //   calendarApi.addEvent({
-    //     id: createEventId(),
-    //     title,
-    //     start: selectInfo.startStr,
-    //     end: selectInfo.endStr,
-    //     allDay: selectInfo.allDay
-    //   });
-    // }
-  }
 
   handleEventClick(clickInfo: EventClickArg) {
     console.log(clickInfo.event);
@@ -95,13 +76,14 @@ export class ScheduleComponent implements OnInit {
    * change course selected
    * @param value 
    */
-  changeCourse(course: any){
-    if(course === undefined){
+  changeCourse(course: any) {
+    this.course = course;
+    if (course === undefined) {
+      this.academicSubjects = [];
       this.initCalendar([]);
       return;
     }
 
-    this.course = course;
     this.getAcademicSubjectByCourseId(course.id);
     this.getAllScheduleByCourse(course.id);
   }
@@ -109,7 +91,7 @@ export class ScheduleComponent implements OnInit {
   /**
    * add academic subject to schedule
    */
-  addAcademicSubjectToSchedule(item: AcademicSubject){
+  addAcademicSubjectToSchedule(item: AcademicSubject) {
     const title = `Asignar horario a ${item.description}`;
 
     this.modalRef = this.modalService.open(ModalScheduleComponent, {
@@ -124,7 +106,7 @@ export class ScheduleComponent implements OnInit {
           idAcademicSubject: item.id,
           idCourse: this.course.id,
           start: response.start,
-          end:  response.end,
+          end: response.end,
         }
         this.createSchedule(schedule);
       }
@@ -135,11 +117,10 @@ export class ScheduleComponent implements OnInit {
    * get all schedule by course
    * @param idCourse 
    */
-  private async getAllScheduleByCourse(idCourse: number){
+  private async getAllScheduleByCourse(idCourse: number) {
     let events: EventInput[] = [];
     this._scheduleService.getAllByIdCourse(idCourse).subscribe({
       next: (response) => {
-      
         response.forEach(arg => {
           const academicSubject = this.academicSubjects.find(item => item.id === arg.idAcademicSubject);
           // const academic: AcademicSubject = await firstValueFrom(this.getAcademicSubjectById(arg.idAcademicSubject));
@@ -160,11 +141,11 @@ export class ScheduleComponent implements OnInit {
    * @param id 
    * @returns 
    */
-  private getAcademicSubjectById(id: number): Observable<AcademicSubject>{
+  private getAcademicSubjectById(id: number): Observable<AcademicSubject> {
     return this._academicSubjectService.getAcademicSubjectById(id);
   }
 
-  private getAllCoursesWithtAcademicSubjectAssign(){
+  private getAllCoursesWithtAcademicSubjectAssign() {
     this._courseService.getAllCoursesWithtAcademicSubjectAssign().subscribe({
       next: response => {
         this.courses = response;
@@ -172,7 +153,7 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  private getAcademicSubjectByCourseId(idCourse: number){
+  private getAcademicSubjectByCourseId(idCourse: number) {
     this._academicSubjectService.getAllAcademicSubjectByIdCourse(idCourse).subscribe({
       next: response => {
         this.academicSubjects = response;
@@ -180,27 +161,34 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  private createSchedule(schedule: Schedule){
-    console.log(schedule)
-
-    this._scheduleService.createCourse(schedule).subscribe({
+  /**
+   * create course
+   * 
+   * @param schedule 
+   */
+  private createSchedule(schedule: Schedule) {
+    this._scheduleService.createSchedule(schedule).subscribe({
       next: (response: any) => {
         if (response.statusCode === 201) {
           console.log(response);
           SwalAlertUtil.showSuccessMessage(response.message)
-          this.getAcademicSubjectByCourseId(schedule.idCourse);
+          this.getAllScheduleByCourse(schedule.idCourse);
         }
       },
       error: (e) => {
         console.log(e)
-        if (e?.status === 400){}
-          // this.showValidationMessage(data, e.error.fieldErrors);
+        if (e?.status === 400) { }
+          SwalAlertUtil.showErrorsMessage(e.message)
       },
     })
   }
 
-  private initCalendar(events: any[]){
-    console.log(events)
+  /**
+   * init calendar 
+   * 
+   * @param events 
+   */
+  private initCalendar(events: any[]) {
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin, resourceTimelinePlugin, bootstrap5Plugin],
       schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
@@ -208,49 +196,23 @@ export class ScheduleComponent implements OnInit {
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        // right: 'dayGridMonth,dayGridWeek,dayGridDay,resourceTimelineDay,resourceTimelineTenDay,listWeek'
         right: 'dayGridMonth,timeGridWeek,listWeek'
       },
       initialView: 'timeGridWeek',
-      scrollTime: '00:00', // undo default 6am scrollTime
-      timeZone: 'UTC',
-      aspectRatio: 1.8,
+      scrollTime: '07:00:00', // undo default 6am scrollTime
+      eventTimeFormat: {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+      },
+      eventColor: '#378006',
+      eventBackgroundColor: '#378006',
+      // timeZone: 'UTC',
+      aspectRatio: 2,
       locale: esLocale,
-      // droppable: true,
-      events: events, // alternatively, use the `events` setting to fetch from a feed
-      weekends: true,
-      editable: false,
-      selectable: true,
-      selectMirror: true,
-      dayMaxEvents: true,
-      select: this.handleDateSelect.bind(this),
+      events: events,
       eventClick: this.handleEventClick.bind(this),
-      // eventsSet: this.handleEvents.bind(this),
-      eventDragStop: this.handleEventDragStop.bind(this),
-      dateClick: this.handleDateClick.bind(this),
-      /* you can update a remote database when these fire:
-      eventAdd:
-      eventChange:
-      eventRemove:
-      */
     };
   }
-
-  // private initDraggable(){
-  //   let draggableEl: any = document.getElementById('external-events');
-  //   var self = this;
-  //   new Draggable(draggableEl, {
-  //     itemSelector: '.fc-event',
-  //     eventData: function(eventEl: any) {
-  //       console.log(eventEl);
-  //       // if (theCheckbox) {
-  //         eventEl.parentNode.removeChild(eventEl);
-  //       // }
-  //       return {
-  //         title: eventEl.innerText
-  //       };
-  //     }
-  //   });
-  // }
 
 }
