@@ -205,8 +205,8 @@ export class ScheduleComponent implements OnInit {
         minute: '2-digit',
         hour12: true
       },
-      eventColor: '#378006',
-      eventBackgroundColor: '#378006',
+      eventColor: '#b23cfd',
+      eventBackgroundColor: '#b23cfd',
       // timeZone: 'UTC',
       aspectRatio: 2,
       locale: esLocale,

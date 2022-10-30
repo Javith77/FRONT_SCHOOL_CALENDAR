@@ -1,1 +1,66 @@
-<p>modal-student works!</p>
+<div class="modal-header" tabindex="-1" role="dialog">
+    <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="closeModal(null)"></button>
+</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="modal-body">
+      <div class="row">
+        <ng-select id="typeDocument" placeholder="Tipo documento" class="mb-3" formControlName="typeDocument" required>
+            <ng-option value="Cédula de ciudadanía">Cédula de ciudadanía</ng-option>
+            <ng-option value="Tarjeta de identidad">Tarjeta de identidad</ng-option>
+            <ng-option value="Tarjeta de extranjería">Tarjeta de extranjería</ng-option>
+            <ng-option value="Cédula de extranjería">Cédula de extranjería</ng-option>
+            <ng-option value="Pasaporte">Pasaporte</ng-option>
+        </ng-select>
+    
+        <div class="col-md-12 mb-3">
+            <mdb-form-control>
+                <input mdbValidate validateSuccess="false" mdbInput type="text" id="document" class="form-control" formControlName="document" required/>
+                <label mdbLabel class="form-label" for="document">N. documento</label>
+            </mdb-form-control>    
+        </div>
+       
+        <div class="col-md-12 mb-3">
+            <mdb-form-control>
+                <input mdbValidate validateSuccess="false" mdbInput type="text" id="name" class="form-control" formControlName="name" required/>
+                <label mdbLabel class="form-label" for="name">Nombres</label>
+                <!-- <mdb-error *ngIf="form.get('name')?.invalid && isSubmit" class="mb-5">
+                    El nombre es requerido
+                </mdb-error> -->
+            </mdb-form-control>
+        </div>
+    
+        <div class="col-md-12 mb-3">
+            <mdb-form-control>
+                <input mdbValidate validateSuccess="false" mdbInput type="text" id="lastName" class="form-control" formControlName="lastName" required/>
+                <label mdbLabel class="form-label" for="lastName">Apellidos</label>
+            </mdb-form-control>
+        </div>
+
+        <div class="row justify-content-between mb-3">
+            <div class="col-12">
+                <label mdbLabel class="form-label col-2" for="dateOfBirth">Genero </label>
+                <div class="btn-group">
+                    <input mdbRadio type="radio" class="btn-check" name="options" id="genreM" autocomplete="off" (click)="changeGenre('M')" [checked]="getGenre('M')" />
+                    <label class="btn btn-secondary" for="genreM">M</label>
+                    <input mdbRadio type="radio" class="btn-check" name="options" id="genreF" autocomplete="off" (click)="changeGenre('F')" [checked]="getGenre('F')"/>
+                    <label class="btn btn-secondary" for="genreF">F</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+            <mdb-form-control>
+                <input mdbValidate validateSuccess="false" mdbInput type="text" id="address" class="form-control" formControlName="address" required/>
+                <label mdbLabel class="form-label" for="address">Dirección</label>
+            </mdb-form-control>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal(null)">
+            Cerrar
+        </button>
+        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    </div>
+</form>
