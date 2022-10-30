@@ -12,13 +12,9 @@ server.listen(port, function() {
 })
 
 // Serve static files
-app.use(express.static(__dirname + '/dist/FRONT_SCHOOL_CALENDAR'));
+app.use(express.static(path.join(__dirname, 'dist','FRONT_SCHOOL_CALENDAR')));
 
 // Send all requests to index.html
-app.get('', function(req, res) {
-  res.sendFile(path.join(__dirname, 'src', 'index.html'));
-});
-
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, 'src', 'index.html'));
+  res.sendFile(path.join(__dirname, 'dist', 'FRONT_SCHOOL_CALENDAR', 'index.html'));
 });
