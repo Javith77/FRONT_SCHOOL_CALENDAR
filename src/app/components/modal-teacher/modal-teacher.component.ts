@@ -14,19 +14,6 @@ export class ModalTeacherComponent implements OnInit {
   teacherItem!: Teacher;
   academicSubjectsAssigned!: [];
   academicSubjectsUnassigned!: [];
-  tagModel: any = [
-    {
-      display: 'display',
-      value: 124242,
-      readonly: true
-    },
-    {
-      display: 'display',
-      value: 124242,
-      readonly: true
-    }
-  ]
-  // typeDocument: string | undefined;
   form!: FormGroup;
   isSubmit = false;
   genre!: string;

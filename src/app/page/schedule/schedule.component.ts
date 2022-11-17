@@ -170,9 +170,10 @@ export class ScheduleComponent implements OnInit {
     this._scheduleService.createSchedule(schedule).subscribe({
       next: (response: any) => {
         if (response.statusCode === 201) {
-          console.log(response);
           SwalAlertUtil.showSuccessMessage(response.message)
           this.getAllScheduleByCourse(schedule.idCourse);
+        }else{
+          SwalAlertUtil.showErrorsMessage(response.message)
         }
       },
       error: (e) => {
